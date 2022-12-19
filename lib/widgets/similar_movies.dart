@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:filmku/bloc/get_movie_similar_bloc.dart';
 import 'package:filmku/model/movie.dart';
+import 'package:filmku/screens/detail_screen.dart';
 import 'package:filmku/model/movie_response.dart';
 import 'package:filmku/style/theme.dart' as Style;
 
@@ -125,7 +126,15 @@ class _SimilarMoviesState extends State<SimilarMovies> {
             return Padding(
               padding: EdgeInsets.only(top: 10.0, bottom: 10.0, right: 15.0),
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          MovieDetailScreen(movie: movies[index]),
+                    ),
+                  );
+                },
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[

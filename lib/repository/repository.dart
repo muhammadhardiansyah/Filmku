@@ -21,6 +21,7 @@ class MovieRepository {
   var getUpcomingUrl = "$mainUrl/movie/upcoming";
   var movieUrl = "$mainUrl/movie";
 
+
   Future<MovieResponse> getMovies() async {
     var params = {
       "api_key": apiKey,
@@ -52,11 +53,19 @@ class MovieRepository {
   }
 
   Future<UpcomingResponse> getUpcoming() async {
+    var now_ = DateTime.now();
+    var now  = now_.toString().substring(0,10); 
     var params = {
-      "api_key": apiKey,
-      "language": "en-US",
-      "page": 5
-    };
+      "api_key": apiKey, 
+      "language": "en-US", 
+      "page": 1, 
+      "primary_release_date.gte": now,
+      };
+    // var params = {
+    //   "api_key": apiKey,
+    //   "language": "en-US",
+    //   "page": 7
+    // };
     try {
       Response response = await _dio.get(getUpcomingUrl, queryParameters: params);
       return UpcomingResponse.fromJson(response.data);

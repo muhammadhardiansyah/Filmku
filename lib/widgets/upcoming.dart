@@ -92,8 +92,8 @@ class _UpComingState extends State<UpComing> {
     // var strNow = now_.toString();
     // DateTime now = DateTime.parse(strNow);
     //var release = cek_upcoming[index].release_date.toString();
-    List<Movie> upcoming = data.upcoming;
-    if (upcoming.length == 0) {
+    List<Movie> movies = data.upcoming;
+    if (movies.length == 0) {
       return Container(
         width: MediaQuery.of(context).size.width,
         child: Column(
@@ -117,16 +117,8 @@ class _UpComingState extends State<UpComing> {
         padding: EdgeInsets.only(left: 10.0),
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
-          itemCount: upcoming.length,
+          itemCount: movies.length,
           itemBuilder: (context, index) {
-            var now_ = DateTime.now();
-            var strNow = now_.toString();
-            DateTime now = DateTime.parse(strNow);
-            var release_ = upcoming[index].release_date.toString();
-            DateTime release = DateTime.parse(release_);
-            //var cek = true;
-            var cek = release.isAfter(now);
-            if (cek == true){
             return Padding(
               padding: EdgeInsets.only(top: 10.0, bottom: 10.0, right: 15.0),
               child: GestureDetector(
@@ -135,7 +127,7 @@ class _UpComingState extends State<UpComing> {
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          MovieDetailScreen(movie: upcoming[index]),
+                          MovieDetailScreen(movie: movies[index]),
                     ),
                   );
                 },
@@ -143,7 +135,7 @@ class _UpComingState extends State<UpComing> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Hero(
-                      tag: upcoming[index].id,
+                      tag: movies[index].id,
                       child: Container(
                           width: 120.0,
                           height: 180.0,
@@ -155,7 +147,7 @@ class _UpComingState extends State<UpComing> {
                                 fit: BoxFit.cover,
                                 image: NetworkImage(
                                     "https://image.tmdb.org/t/p/w200/" +
-                                        upcoming[index].poster)),
+                                        movies[index].poster)),
                           )),
                     ),
                     SizedBox(
@@ -164,7 +156,7 @@ class _UpComingState extends State<UpComing> {
                     Container(
                       width: 100,
                       child: Text(
-                        upcoming[index].title,
+                        movies[index].title,
                         maxLines: 2,
                         style: TextStyle(
                             height: 1.4,
@@ -180,7 +172,7 @@ class _UpComingState extends State<UpComing> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         Text(
-                          upcoming[index].release_date.toString(),
+                          movies[index].release_date.toString(),
                           style: TextStyle(
                               color: Colors.yellow,
                               fontSize: 12.0,
@@ -221,7 +213,6 @@ class _UpComingState extends State<UpComing> {
                 ),
               ),
             );
-            };
           },
         ),
       );
