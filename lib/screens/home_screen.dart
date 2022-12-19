@@ -1,9 +1,12 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:filmku/widgets/nowplaying.dart';
+import 'package:filmku/widgets/trending.dart';
 import 'package:flutter/material.dart';
 import 'package:filmku/style/theme.dart' as Style;
 import 'package:filmku/widgets/best_movies.dart';
 import 'package:filmku/widgets/genres.dart';
 import 'package:filmku/widgets/now_playing.dart';
+import 'package:filmku/widgets/upcoming.dart';
 import 'package:filmku/widgets/persons.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -31,8 +34,11 @@ class _HomeScreenState extends State<HomeScreen> {
       body: ListView(
         children: <Widget>[
           NowPlaying(),
-          GenresScreen(),
-          //PersonsList(),
+          TrendingMovies(),
+          NowPlayingMovies(),
+          //GenresScreen(),
+          UpComing(),
+          PersonsList(),
           BestMovies(),
         ],
       ),

@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:filmku/bloc/get_now_playing_bloc.dart';
 import 'package:filmku/model/movie.dart';
+import 'package:filmku/screens/detail_screen.dart';
 import 'package:filmku/model/movie_response.dart';
 import 'package:filmku/style/theme.dart' as Style;
+
 import 'package:page_indicator/page_indicator.dart';
 
 class NowPlaying extends StatefulWidget {
@@ -105,7 +107,15 @@ class _NowPlayingState extends State<NowPlaying> {
             itemCount: movies.take(5).length,
             itemBuilder: (context, index) {
               return GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          MovieDetailScreen(movie: movies[index]),
+                    ),
+                  );
+                },
                 child: Stack(
                   children: <Widget>[
                     Hero(

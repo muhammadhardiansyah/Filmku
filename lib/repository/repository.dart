@@ -2,6 +2,8 @@ import 'package:filmku/model/cast_response.dart';
 import 'package:filmku/model/genre_response.dart';
 import 'package:filmku/model/movie_detail_response.dart';
 import 'package:filmku/model/movie_response.dart';
+import 'package:filmku/model/upcoming_response.dart';
+import 'package:filmku/model/trending_response.dart';
 import 'package:dio/dio.dart';
 import 'package:filmku/model/person_response.dart';
 import 'package:filmku/model/video_response.dart';
@@ -10,11 +12,13 @@ class MovieRepository {
   final String apiKey = "5d968bf84ae0efa980b2f800e7b67d3c";
   static String mainUrl = "https://api.themoviedb.org/3";
   final Dio _dio = Dio();
-  var getPopularUrl = '$mainUrl/movie/top_rated';
+  var getTopRatedUrl = '$mainUrl/movie/top_rated';
+  var getTrendingUrl = '$mainUrl/movie/popular';
   var getMoviesUrl = '$mainUrl/discover/movie';
   var getPlayingUrl = '$mainUrl/movie/now_playing';
   var getGenresUrl = "$mainUrl/genre/movie/list";
   var getPersonsUrl = "$mainUrl/trending/person/week";
+  var getUpcomingUrl = "$mainUrl/movie/upcoming";
   var movieUrl = "$mainUrl/movie";
 
   Future<MovieResponse> getMovies() async {
@@ -24,11 +28,41 @@ class MovieRepository {
       "page": 1
     };
     try {
-      Response response = await _dio.get(getPopularUrl, queryParameters: params);
+      Response response = await _dio.get(getTopRatedUrl, queryParameters: params);
       return MovieResponse.fromJson(response.data);
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
       return MovieResponse.withError("$error");
+    }
+  }
+
+  Future<TrendingResponse> getTrending() async {
+    var params = {
+      "api_key": apiKey,
+      "language": "en-US",
+      "page": 1
+    };
+    try {
+      Response response = await _dio.get(getTrendingUrl, queryParameters: params);
+      return TrendingResponse.fromJson(response.data);
+    } catch (error, stacktrace) {
+      print("Exception occured: $error stackTrace: $stacktrace");
+      return TrendingResponse.withError("$error");
+    }
+  }
+
+  Future<UpcomingResponse> getUpcoming() async {
+    var params = {
+      "api_key": apiKey,
+      "language": "en-US",
+      "page": 5
+    };
+    try {
+      Response response = await _dio.get(getUpcomingUrl, queryParameters: params);
+      return UpcomingResponse.fromJson(response.data);
+    } catch (error, stacktrace) {
+      print("Exception occured: $error stackTrace: $stacktrace");
+      return UpcomingResponse.withError("$error");
     }
   }
 

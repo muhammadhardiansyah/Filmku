@@ -1,23 +1,24 @@
 
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:filmku/model/movie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:filmku/bloc/get_movies_bloc.dart';
-import 'package:filmku/model/movie.dart';
-import 'package:filmku/screens/detail_screen.dart';
-import 'package:filmku/model/movie_response.dart';
+import 'package:filmku/bloc/get_upcoming_bloc.dart';
+import 'package:filmku/model/upcoming.dart';
+import 'package:filmku/model/upcoming_response.dart';
 import 'package:filmku/style/theme.dart' as Style;
+import 'package:filmku/screens/detail_screen.dart';
 
-class BestMovies extends StatefulWidget {
+class UpComing extends StatefulWidget {
   @override
-  _BestMoviesState createState() => _BestMoviesState();
+  _UpComingState createState() => _UpComingState();
 }
 
-class _BestMoviesState extends State<BestMovies> {
+class _UpComingState extends State<UpComing> {
   @override
   void initState() {
     super.initState();
-    moviesBloc..getMovies();
+    upcomingBloc..getUpcoming();
   }
 
   @override
@@ -28,7 +29,7 @@ class _BestMoviesState extends State<BestMovies> {
         Padding(
           padding: const EdgeInsets.only(left: 10.0, top: 20.0),
           child: Text(
-            "BEST POPULAR MOVIES",
+            "UPCOMING MOVIES",
             style: TextStyle(
                 color: Style.Colors.titleColor,
                 fontWeight: FontWeight.w500,
@@ -38,9 +39,9 @@ class _BestMoviesState extends State<BestMovies> {
         SizedBox(
           height: 5.0,
         ),
-        StreamBuilder<MovieResponse>(
-          stream: moviesBloc.subject.stream,
-          builder: (context, AsyncSnapshot<MovieResponse> snapshot) {
+        StreamBuilder<UpcomingResponse>(
+          stream: upcomingBloc.subject.stream,
+          builder: (context, AsyncSnapshot<UpcomingResponse> snapshot) {
             if (snapshot.hasData) {
               if (snapshot.data.error != null &&
                   snapshot.data.error.length > 0) {
@@ -85,9 +86,14 @@ class _BestMoviesState extends State<BestMovies> {
     ));
   }
 
-  Widget _buildHomeWidget(MovieResponse data) {
-    List<Movie> movies = data.movies;
-    if (movies.length == 0) {
+  Widget _buildHomeWidget(UpcomingResponse data) {
+    // List<Upcoming> cek_upcoming = data.upcoming;
+    // var now_ = DateTime.now();
+    // var strNow = now_.toString();
+    // DateTime now = DateTime.parse(strNow);
+    //var release = cek_upcoming[index].release_date.toString();
+    List<Movie> upcoming = data.upcoming;
+    if (upcoming.length == 0) {
       return Container(
         width: MediaQuery.of(context).size.width,
         child: Column(
@@ -111,8 +117,16 @@ class _BestMoviesState extends State<BestMovies> {
         padding: EdgeInsets.only(left: 10.0),
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
-          itemCount: movies.length,
+          itemCount: upcoming.length,
           itemBuilder: (context, index) {
+            var now_ = DateTime.now();
+            var strNow = now_.toString();
+            DateTime now = DateTime.parse(strNow);
+            var release_ = upcoming[index].release_date.toString();
+            DateTime release = DateTime.parse(release_);
+            //var cek = true;
+            var cek = release.isAfter(now);
+            if (cek == true){
             return Padding(
               padding: EdgeInsets.only(top: 10.0, bottom: 10.0, right: 15.0),
               child: GestureDetector(
@@ -121,7 +135,7 @@ class _BestMoviesState extends State<BestMovies> {
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          MovieDetailScreen(movie: movies[index]),
+                          MovieDetailScreen(movie: upcoming[index]),
                     ),
                   );
                 },
@@ -129,7 +143,7 @@ class _BestMoviesState extends State<BestMovies> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Hero(
-                      tag: movies[index].id,
+                      tag: upcoming[index].id,
                       child: Container(
                           width: 120.0,
                           height: 180.0,
@@ -141,7 +155,7 @@ class _BestMoviesState extends State<BestMovies> {
                                 fit: BoxFit.cover,
                                 image: NetworkImage(
                                     "https://image.tmdb.org/t/p/w200/" +
-                                        movies[index].poster)),
+                                        upcoming[index].poster)),
                           )),
                     ),
                     SizedBox(
@@ -150,7 +164,7 @@ class _BestMoviesState extends State<BestMovies> {
                     Container(
                       width: 100,
                       child: Text(
-                        movies[index].title,
+                        upcoming[index].title,
                         maxLines: 2,
                         style: TextStyle(
                             height: 1.4,
@@ -166,47 +180,48 @@ class _BestMoviesState extends State<BestMovies> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         Text(
-                          movies[index].rating.toString(),
+                          upcoming[index].release_date.toString(),
                           style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 10.0,
-                              fontWeight: FontWeight.bold),
+                              color: Colors.yellow,
+                              fontSize: 12.0,
+                              fontWeight: FontWeight.normal),
                         ),
                         SizedBox(
                           width: 5.0,
                         ),
-                        RatingBar(
-                          ratingWidget: RatingWidget(
-                            empty: Icon(
-                              EvaIcons.star,
-                              color: Style.Colors.secondColor,
-                            ),
-                            full: Icon(
-                              EvaIcons.star,
-                              color: Style.Colors.secondColor,
-                            ),
-                            half: Icon(
-                              EvaIcons.star,
-                              color: Style.Colors.secondColor,
-                            ),
-                          ),
-                          itemSize: 8.0,
-                          initialRating: movies[index].rating / 2,
-                          minRating: 1,
-                          direction: Axis.horizontal,
-                          allowHalfRating: true,
-                          itemCount: 5,
-                          itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
-                          onRatingUpdate: (rating) {
-                            print(rating);
-                          },
-                        )
+                        // RatingBar(
+                        //   ratingWidget: RatingWidget(
+                        //     empty: Icon(
+                        //       EvaIcons.star,
+                        //       color: Style.Colors.secondColor,
+                        //     ),
+                        //     full: Icon(
+                        //       EvaIcons.star,
+                        //       color: Style.Colors.secondColor,
+                        //     ),
+                        //     half: Icon(
+                        //       EvaIcons.star,
+                        //       color: Style.Colors.secondColor,
+                        //     ),
+                        //   ),
+                        //   itemSize: 8.0,
+                        //   initialRating: 0 / 2,
+                        //   minRating: 1,
+                        //   direction: Axis.horizontal,
+                        //   allowHalfRating: true,
+                        //   itemCount: 5,
+                        //   itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
+                        //   onRatingUpdate: (rating) {
+                        //     print(rating);
+                        //   },
+                        // )
                       ],
                     )
                   ],
                 ),
               ),
             );
+            };
           },
         ),
       );

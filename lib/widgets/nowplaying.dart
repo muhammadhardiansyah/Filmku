@@ -2,22 +2,22 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:filmku/bloc/get_movies_bloc.dart';
+import 'package:filmku/bloc/get_now_playing_bloc.dart';
 import 'package:filmku/model/movie.dart';
 import 'package:filmku/screens/detail_screen.dart';
 import 'package:filmku/model/movie_response.dart';
 import 'package:filmku/style/theme.dart' as Style;
 
-class BestMovies extends StatefulWidget {
+class NowPlayingMovies extends StatefulWidget {
   @override
-  _BestMoviesState createState() => _BestMoviesState();
+  _NowPlayingMoviesState createState() => _NowPlayingMoviesState();
 }
 
-class _BestMoviesState extends State<BestMovies> {
+class _NowPlayingMoviesState extends State<NowPlayingMovies> {
   @override
   void initState() {
     super.initState();
-    moviesBloc..getMovies();
+    nowPlayingMoviesBloc..getMovies();
   }
 
   @override
@@ -28,7 +28,7 @@ class _BestMoviesState extends State<BestMovies> {
         Padding(
           padding: const EdgeInsets.only(left: 10.0, top: 20.0),
           child: Text(
-            "BEST POPULAR MOVIES",
+            "NEW RELEASE",
             style: TextStyle(
                 color: Style.Colors.titleColor,
                 fontWeight: FontWeight.w500,
@@ -39,7 +39,7 @@ class _BestMoviesState extends State<BestMovies> {
           height: 5.0,
         ),
         StreamBuilder<MovieResponse>(
-          stream: moviesBloc.subject.stream,
+          stream: nowPlayingMoviesBloc.subject.stream,
           builder: (context, AsyncSnapshot<MovieResponse> snapshot) {
             if (snapshot.hasData) {
               if (snapshot.data.error != null &&
